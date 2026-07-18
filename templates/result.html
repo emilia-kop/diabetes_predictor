@@ -66,7 +66,8 @@
   {% set is_high = 'High' in prediction %}
   <p class="eyebrow">Result</p>
   <h1 class="{{ 'risk-high' if is_high else 'risk-low' }}">{{ prediction }}</h1>
-  <p class="sub">Estimated probability of diabetes: <strong>{{ probability }}%</strong></p>
+  <p class="sub">Estimated probability of diabetes</p>
+  <p class="prob-number {{ 'risk-high' if is_high else 'risk-low' }}" id="probNumber" data-target="{{ probability }}">0%</p>
 
   <div class="bar-track">
     <div class="bar-fill {{ 'high' if is_high else 'low' }}" style="--target-width: {{ probability }}%;"></div>
@@ -96,6 +97,26 @@ for (let i = 0; i < 8; i++) {
   line.setAttribute('stroke', '#244A40'); line.setAttribute('stroke-width', 1); line.setAttribute('stroke-dasharray', '3,2');
   dnaGroup.appendChild(line);
 }
+
+// Animate the probability number counting up from 0 to its final value
+const probEl = document.getElementById('probNumber');
+const target = parseFloat(probEl.dataset.target);
+const duration = 1200; // ms
+const startTime = performance.now();
+
+function tick(now) {
+  const elapsed = now - startTime;
+  const progress = Math.min(elapsed / duration, 1);
+  const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+  const current = (target * eased).toFixed(1);
+  probEl.textContent = current + '%';
+  if (progress < 1) {
+    requestAnimationFrame(tick);
+  } else {
+    probEl.textContent = target + '%';
+  }
+}
+requestAnimationFrame(tick);
 </script>
 
 </body>
