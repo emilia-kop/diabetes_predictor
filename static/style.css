@@ -88,8 +88,20 @@ h1.risk-low { color: var(--sage-deep); }
   font-size: 15px;
   line-height: 1.55;
   color: #4B5C56;
-  margin: 0 0 20px;
+  margin: 0 0 4px;
 }
+
+.prob-number {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1;
+  margin: 0 0 20px;
+  font-variant-numeric: tabular-nums;
+}
+
+.prob-number.risk-high { color: var(--amber); }
+.prob-number.risk-low { color: var(--sage-deep); }
 
 .grid {
   display: grid;
