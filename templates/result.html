@@ -1,37 +1,102 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prediction Result</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prediction Result</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    {% set is_high = 'High' in prediction %}
-    <div class="pulse-strip {{ 'spike' if is_high else '' }}">
-        <svg viewBox="0 0 600 40" preserveAspectRatio="none">
-            {% if is_high %}
-            <polyline points="0,20 100,20 112,2 124,38 136,20 260,20 272,2 284,38 296,20 600,20" />
-            {% else %}
-            <polyline points="0,20 260,20 275,4 290,36 305,20 600,20" />
-            {% endif %}
-        </svg>
-    </div>
 
-    <main class="card">
-        <p class="eyebrow">Result</p>
-        <h1 class="{{ 'risk-high' if is_high else 'risk-low' }}">{{ prediction }}</h1>
-        <p class="sub">Estimated probability of diabetes: <strong>{{ probability }}%</strong></p>
+<div class="bg-layer">
+  <div class="rings" style="width:120px; height:120px;"></div>
+  <div class="rings" style="width:220px; height:220px;"></div>
+  <div class="rings" style="width:320px; height:320px;"></div>
 
-        <div class="bar-track">
-            <div class="bar-fill {{ 'high' if is_high else 'low' }}" style="--target-width: {{ probability }}%;"></div>
-        </div>
+  <svg class="bg-icon icon-glucose" width="80" height="80" viewBox="-40 -40 80 80" opacity="0.10">
+    <polygon points="0,-34 29,-17 29,17 0,34 -29,17 -29,-17" fill="none" stroke="#244A40" stroke-width="2"/>
+    <text x="0" y="5" text-anchor="middle" font-size="11" fill="#244A40" font-weight="600">C6H12O6</text>
+  </svg>
+  <svg class="bg-icon icon-insulin" width="80" height="80" viewBox="-40 -40 80 80" opacity="0.09">
+    <polygon points="0,-38 36,-12 22,32 -22,32 -36,-12" fill="none" stroke="#244A40" stroke-width="1.8"/>
+    <text x="0" y="5" text-anchor="middle" font-size="10" fill="#244A40" font-weight="600">Insulin</text>
+  </svg>
+  <svg class="bg-icon icon-dna" width="70" height="130" viewBox="-35 0 70 130" opacity="0.09">
+    <g id="dna-rungs"></g>
+    <text x="0" y="122" text-anchor="middle" font-size="9" fill="#244A40" font-weight="700">DNA</text>
+  </svg>
+  <svg class="bg-icon icon-blood" width="70" height="90" viewBox="-35 -40 70 90" opacity="0.09">
+    <path d="M0,-36 C16,-20 28,0 28,14 C28,30 16,42 0,42 C-16,42 -28,30 -28,14 C-28,0 -16,-20 0,-36 Z" fill="#16302B"/>
+    <text x="0" y="16" text-anchor="middle" font-size="9" fill="white" font-weight="700">HbA1c</text>
+  </svg>
+  <svg class="bg-icon icon-pancreas" width="90" height="60" viewBox="-45 -30 90 60" opacity="0.08">
+    <g transform="rotate(-20)">
+      <ellipse cx="0" cy="0" rx="38" ry="22" fill="none" stroke="#244A40" stroke-width="2"/>
+      <ellipse cx="24" cy="-8" rx="16" ry="10" fill="none" stroke="#16302B" stroke-width="1.5"/>
+      <text x="-4" y="4" text-anchor="middle" font-size="8.5" fill="#244A40" font-weight="700">Pancreas</text>
+    </g>
+  </svg>
+  <div class="icon-syringe-wrap">
+    <svg width="90" height="90" viewBox="-20 -45 90 90" opacity="0.08">
+      <rect x="-6" y="-28" width="12" height="44" rx="3" fill="none" stroke="#244A40" stroke-width="2"/>
+      <line x1="0" y1="-28" x2="0" y2="-38" stroke="#244A40" stroke-width="2"/>
+      <rect x="-10" y="-42" width="20" height="5" rx="2" fill="#244A40" opacity="0.7"/>
+      <line x1="0" y1="16" x2="0" y2="32" stroke="#16302B" stroke-width="1.5"/>
+      <line x1="-6" y1="16" x2="6" y2="16" stroke="#244A40" stroke-width="1.5"/>
+      <text x="22" y="4" font-size="10" fill="#244A40" font-weight="600">Insulin</text>
+    </svg>
+  </div>
+  <svg class="bg-icon icon-mol1" width="60" height="60" viewBox="-30 -30 60 60" opacity="0.10">
+    <circle r="22" fill="none" stroke="#244A40" stroke-width="1.8"/><text y="4" text-anchor="middle" font-size="11" fill="#244A40" font-weight="700">O2</text>
+  </svg>
+  <svg class="bg-icon icon-mol2" width="52" height="52" viewBox="-26 -26 52 52" opacity="0.09">
+    <circle r="18" fill="none" stroke="#244A40" stroke-width="1.8"/><text y="4" text-anchor="middle" font-size="10" fill="#244A40" font-weight="700">H2O</text>
+  </svg>
+  <svg class="bg-icon icon-mol3" width="64" height="64" viewBox="-32 -32 64 64" opacity="0.10">
+    <circle r="24" fill="none" stroke="#244A40" stroke-width="1.8"/><text y="4" text-anchor="middle" font-size="11" fill="#244A40" font-weight="700">ATP</text>
+  </svg>
+  <svg class="bg-icon icon-mol4" width="56" height="56" viewBox="-28 -28 56 56" opacity="0.09">
+    <circle r="20" fill="none" stroke="#244A40" stroke-width="1.8"/><text y="4" text-anchor="middle" font-size="10" fill="#244A40" font-weight="700">CO2</text>
+  </svg>
+</div>
 
-        <p class="disclaimer">This result comes from a machine learning model trained on population health data. It is a screening estimate only, not a medical diagnosis — please consult a doctor for confirmation.</p>
+<main class="card">
+  {% set is_high = 'High' in prediction %}
+  <p class="eyebrow">Result</p>
+  <h1 class="{{ 'risk-high' if is_high else 'risk-low' }}">{{ prediction }}</h1>
+  <p class="sub">Estimated probability of diabetes: <strong>{{ probability }}%</strong></p>
 
-        <a class="back-link" href="/">&larr; Check another patient</a>
-    </main>
+  <div class="bar-track">
+    <div class="bar-fill {{ 'high' if is_high else 'low' }}" style="--target-width: {{ probability }}%;"></div>
+  </div>
+
+  <p class="disclaimer">This result comes from a machine learning model trained on population health data. It is a screening estimate only, not a medical diagnosis — please consult a doctor for confirmation.</p>
+
+  <a class="back-link" href="/">&larr; Check another patient</a>
+</main>
+
+<script>
+const dnaGroup = document.getElementById('dna-rungs');
+for (let i = 0; i < 8; i++) {
+  const y = i * 14;
+  const dx = Math.sin(i * 0.8) * 16;
+  const ns = 'http://www.w3.org/2000/svg';
+  const e1 = document.createElementNS(ns, 'ellipse');
+  e1.setAttribute('cx', dx); e1.setAttribute('cy', y); e1.setAttribute('rx', 13); e1.setAttribute('ry', 4.5);
+  e1.setAttribute('fill', 'none'); e1.setAttribute('stroke', '#244A40'); e1.setAttribute('stroke-width', 1.5);
+  dnaGroup.appendChild(e1);
+  const e2 = document.createElementNS(ns, 'ellipse');
+  e2.setAttribute('cx', -dx); e2.setAttribute('cy', y + 7); e2.setAttribute('rx', 13); e2.setAttribute('ry', 4.5);
+  e2.setAttribute('fill', 'none'); e2.setAttribute('stroke', '#16302B'); e2.setAttribute('stroke-width', 1.5);
+  dnaGroup.appendChild(e2);
+  const line = document.createElementNS(ns, 'line');
+  line.setAttribute('x1', dx); line.setAttribute('y1', y); line.setAttribute('x2', -dx); line.setAttribute('y2', y);
+  line.setAttribute('stroke', '#244A40'); line.setAttribute('stroke-width', 1); line.setAttribute('stroke-dasharray', '3,2');
+  dnaGroup.appendChild(line);
+}
+</script>
+
 </body>
 </html>
