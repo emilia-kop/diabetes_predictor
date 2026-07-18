@@ -4,9 +4,9 @@
   --sage: #3E7C6B;
   --sage-deep: #244A40;
   --amber: #C97A2B;
+  --grid-line: rgba(62, 124, 107, 0.10);
   --line: #D6E3DE;
   --card: #FFFFFF;
-  --grid-line: rgba(62, 124, 107, 0.07);
 }
 
 * { box-sizing: border-box; }
@@ -24,87 +24,32 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   position: relative;
   overflow-x: hidden;
 }
 
-/* soft floating glow drifting slowly behind everything */
-body::before,
-body::after {
-  content: "";
-  position: fixed;
-  width: 480px;
-  height: 480px;
-  border-radius: 50%;
-  filter: blur(90px);
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.35;
-}
+.bg-layer { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+.bg-icon { position: absolute; }
 
-body::before {
-  background: radial-gradient(circle, #A9D6C4 0%, transparent 70%);
-  top: -120px;
-  left: -140px;
-  animation: driftA 22s ease-in-out infinite;
-}
+@keyframes floatA { 0%,100% { transform: translate(0,0); } 50% { transform: translate(36px,-42px); } }
+@keyframes floatB { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-32px,38px); } }
+@keyframes floatC { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-40px,-26px); } }
 
-body::after {
-  background: radial-gradient(circle, #E8C99A 0%, transparent 70%);
-  bottom: -140px;
-  right: -120px;
-  animation: driftB 26s ease-in-out infinite;
-}
+.icon-glucose  { top: 70px;  left: 40px;  animation: floatA 8s ease-in-out infinite; }
+.icon-insulin  { top: 60px;  right: 60px; animation: floatB 9.5s ease-in-out infinite; }
+.icon-dna      { top: 240px; left: 16px;  animation: floatC 8.5s ease-in-out infinite; }
+.icon-blood    { bottom: 100px; left: 60px;  animation: floatA 10s ease-in-out infinite reverse; }
+.icon-pancreas { bottom: 90px; right: 70px; animation: floatB 11s ease-in-out infinite reverse; }
+.icon-syringe-wrap { position: absolute; top: 30px; left: 50%; transform: translateX(-50%); animation: floatC 8.2s ease-in-out infinite; }
+.icon-mol1 { top: 42%; left: 12%; animation: floatC 9s ease-in-out infinite; }
+.icon-mol2 { top: 36%; right: 14%; animation: floatA 10.5s ease-in-out infinite reverse; }
+.icon-mol3 { top: 60%; right: 20%; animation: floatB 8s ease-in-out infinite; }
+.icon-mol4 { top: 56%; left: 16%; animation: floatA 11.5s ease-in-out infinite; }
 
-@keyframes driftA {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(60px, 40px) scale(1.15); }
-}
-
-@keyframes driftB {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-50px, -30px) scale(1.1); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  body::before, body::after { animation: none; }
-}
-
-.pulse-strip {
-  width: 100%;
-  max-width: 720px;
-  height: 44px;
-  margin-top: 32px;
-  position: relative;
-  z-index: 1;
-}
-
-.pulse-strip svg {
-  width: 100%;
-  height: 100%;
-}
-
-.pulse-strip polyline {
-  fill: none;
-  stroke: var(--sage);
-  stroke-width: 2.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 900;
-  stroke-dashoffset: 900;
-  animation: draw-pulse 1.8s ease-out forwards;
-}
-
-.pulse-strip.spike polyline {
-  stroke: var(--amber);
-}
-
-@keyframes draw-pulse {
-  to { stroke-dashoffset: 0; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .pulse-strip polyline { animation: none; stroke-dashoffset: 0; }
+.rings {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  border-radius: 50%; border: 1px solid var(--sage-deep); opacity: 0.05;
 }
 
 .card {
@@ -114,16 +59,10 @@ body::after {
   padding: 40px 44px;
   max-width: 640px;
   width: calc(100% - 48px);
-  margin: 20px 0 60px;
+  margin: 32px 0;
   box-shadow: 0 20px 45px -30px rgba(22, 48, 43, 0.35);
   position: relative;
   z-index: 1;
-  animation: rise-in 0.5s ease-out;
-}
-
-@keyframes rise-in {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
 }
 
 .eyebrow {
@@ -180,7 +119,6 @@ input, select {
   border-radius: 8px;
   background: #FBFDFC;
   color: var(--ink);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 input:focus, select:focus {
@@ -189,7 +127,7 @@ input:focus, select:focus {
   box-shadow: 0 0 0 3px rgba(62, 124, 107, 0.15);
 }
 
-button {
+button.submit {
   width: 100%;
   padding: 14px;
   background: var(--sage-deep);
@@ -200,11 +138,9 @@ button {
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
-  transition: background 0.15s ease, transform 0.1s ease;
 }
 
-button:hover { background: var(--sage); }
-button:active { transform: scale(0.99); }
+button.submit:hover { background: var(--sage); }
 
 .bar-track {
   width: 100%;
