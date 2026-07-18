@@ -1,85 +1,154 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diabetes Risk Predictor</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diabetes Risk Predictor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="pulse-strip">
-        <svg viewBox="0 0 600 40" preserveAspectRatio="none">
-            <polyline points="0,20 260,20 275,4 290,36 305,20 600,20" />
-        </svg>
+
+<div class="bg-layer">
+  <div class="rings" style="width:120px; height:120px;"></div>
+  <div class="rings" style="width:220px; height:220px;"></div>
+  <div class="rings" style="width:320px; height:320px;"></div>
+
+  <svg class="bg-icon icon-glucose" width="80" height="80" viewBox="-40 -40 80 80" opacity="0.10">
+    <polygon points="0,-34 29,-17 29,17 0,34 -29,17 -29,-17" fill="none" stroke="#244A40" stroke-width="2"/>
+    <text x="0" y="5" text-anchor="middle" font-size="11" fill="#244A40" font-weight="600">C6H12O6</text>
+  </svg>
+  <svg class="bg-icon icon-insulin" width="80" height="80" viewBox="-40 -40 80 80" opacity="0.09">
+    <polygon points="0,-38 36,-12 22,32 -22,32 -36,-12" fill="none" stroke="#244A40" stroke-width="1.8"/>
+    <text x="0" y="5" text-anchor="middle" font-size="10" fill="#244A40" font-weight="600">Insulin</text>
+  </svg>
+  <svg class="bg-icon icon-dna" width="70" height="130" viewBox="-35 0 70 130" opacity="0.09">
+    <g id="dna-rungs"></g>
+    <text x="0" y="122" text-anchor="middle" font-size="9" fill="#244A40" font-weight="700">DNA</text>
+  </svg>
+  <svg class="bg-icon icon-blood" width="70" height="90" viewBox="-35 -40 70 90" opacity="0.09">
+    <path d="M0,-36 C16,-20 28,0 28,14 C28,30 16,42 0,42 C-16,42 -28,30 -28,14 C-28,0 -16,-20 0,-36 Z" fill="#16302B"/>
+    <text x="0" y="16" text-anchor="middle" font-size="9" fill="white" font-weight="700">HbA1c</text>
+  </svg>
+  <svg class="bg-icon icon-pancreas" width="90" height="60" viewBox="-45 -30 90 60" opacity="0.08">
+    <g transform="rotate(-20)">
+      <ellipse cx="0" cy="0" rx="38" ry="22" fill="none" stroke="#244A40" stroke-width="2"/>
+      <ellipse cx="24" cy="-8" rx="16" ry="10" fill="none" stroke="#16302B" stroke-width="1.5"/>
+      <text x="-4" y="4" text-anchor="middle" font-size="8.5" fill="#244A40" font-weight="700">Pancreas</text>
+    </g>
+  </svg>
+  <div class="icon-syringe-wrap">
+    <svg width="90" height="90" viewBox="-20 -45 90 90" opacity="0.08">
+      <rect x="-6" y="-28" width="12" height="44" rx="3" fill="none" stroke="#244A40" stroke-width="2"/>
+      <line x1="0" y1="-28" x2="0" y2="-38" stroke="#244A40" stroke-width="2"/>
+      <rect x="-10" y="-42" width="20" height="5" rx="2" fill="#244A40" opacity="0.7"/>
+      <line x1="0" y1="16" x2="0" y2="32" stroke="#16302B" stroke-width="1.5"/>
+      <line x1="-6" y1="16" x2="6" y2="16" stroke="#244A40" stroke-width="1.5"/>
+      <text x="22" y="4" font-size="10" fill="#244A40" font-weight="600">Insulin</text>
+    </svg>
+  </div>
+  <svg class="bg-icon icon-mol1" width="60" height="60" viewBox="-30 -30 60 60" opacity="0.10">
+    <circle r="22" fill="none" stroke="#244A40" stroke-width="1.8"/><text y="4" text-anchor="middle" font-size="11" fill="#244A40" font-weight="700">O2</text>
+  </svg>
+  <svg class="bg-icon icon-mol2" width="52" height="52" viewBox="-26 -26 52 52" opacity="0.09">
+    <circle r="18" fill="none" stroke="#244A40" stroke-width="1.8"/><text y="4" text-anchor="middle" font-size="10" fill="#244A40" font-weight="700">H2O</text>
+  </svg>
+  <svg class="bg-icon icon-mol3" width="64" height="64" viewBox="-32 -32 64 64" opacity="0.10">
+    <circle r="24" fill="none" stroke="#244A40" stroke-width="1.8"/><text y="4" text-anchor="middle" font-size="11" fill="#244A40" font-weight="700">ATP</text>
+  </svg>
+  <svg class="bg-icon icon-mol4" width="56" height="56" viewBox="-28 -28 56 56" opacity="0.09">
+    <circle r="20" fill="none" stroke="#244A40" stroke-width="1.8"/><text y="4" text-anchor="middle" font-size="10" fill="#244A40" font-weight="700">CO2</text>
+  </svg>
+</div>
+
+<main class="card">
+  <p class="eyebrow">Health Risk Screening</p>
+  <h1>Diabetes Risk Predictor</h1>
+
+  <form action="/predict" method="post">
+    <div class="grid">
+      <div class="field">
+        <label>Gender</label>
+        <select name="gender">
+          <option value="Female">Female</option>
+          <option value="Male">Male</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Age</label>
+        <input type="number" step="1" name="age" placeholder="e.g. 45" required>
+      </div>
+
+      <div class="field">
+        <label>Hypertension</label>
+        <select name="hypertension">
+          <option value="0">No</option>
+          <option value="1">Yes</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Heart Disease</label>
+        <select name="heart_disease">
+          <option value="0">No</option>
+          <option value="1">Yes</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Smoking History</label>
+        <select name="smoking_history">
+          <option value="never">never</option>
+          <option value="No Info">No Info</option>
+          <option value="former">former</option>
+          <option value="not current">not current</option>
+          <option value="ever">ever</option>
+          <option value="current">current</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>BMI</label>
+        <input type="number" step="0.1" name="bmi" placeholder="e.g. 27.3" required>
+      </div>
+
+      <div class="field">
+        <label>HbA1c Level</label>
+        <input type="number" step="0.1" name="HbA1c_level" placeholder="e.g. 5.8" required>
+      </div>
+
+      <div class="field">
+        <label>Blood Glucose Level</label>
+        <input type="number" step="1" name="blood_glucose_level" placeholder="e.g. 140" required>
+      </div>
     </div>
 
-    <main class="card">
-        <p class="eyebrow">Health Risk Screening</p>
-        <h1>Diabetes Risk Predictor</h1>
+    <button type="submit" class="submit">Check Risk</button>
+  </form>
+</main>
 
-        <form action="/predict" method="post">
-            <div class="grid">
-                <div class="field">
-                    <label>Gender</label>
-                    <select name="gender">
-                        <option value="Female">Female</option>
-                        <option value="Male">Male</option>
-                    </select>
-                </div>
+<script>
+const dnaGroup = document.getElementById('dna-rungs');
+for (let i = 0; i < 8; i++) {
+  const y = i * 14;
+  const dx = Math.sin(i * 0.8) * 16;
+  const ns = 'http://www.w3.org/2000/svg';
+  const e1 = document.createElementNS(ns, 'ellipse');
+  e1.setAttribute('cx', dx); e1.setAttribute('cy', y); e1.setAttribute('rx', 13); e1.setAttribute('ry', 4.5);
+  e1.setAttribute('fill', 'none'); e1.setAttribute('stroke', '#244A40'); e1.setAttribute('stroke-width', 1.5);
+  dnaGroup.appendChild(e1);
+  const e2 = document.createElementNS(ns, 'ellipse');
+  e2.setAttribute('cx', -dx); e2.setAttribute('cy', y + 7); e2.setAttribute('rx', 13); e2.setAttribute('ry', 4.5);
+  e2.setAttribute('fill', 'none'); e2.setAttribute('stroke', '#16302B'); e2.setAttribute('stroke-width', 1.5);
+  dnaGroup.appendChild(e2);
+  const line = document.createElementNS(ns, 'line');
+  line.setAttribute('x1', dx); line.setAttribute('y1', y); line.setAttribute('x2', -dx); line.setAttribute('y2', y);
+  line.setAttribute('stroke', '#244A40'); line.setAttribute('stroke-width', 1); line.setAttribute('stroke-dasharray', '3,2');
+  dnaGroup.appendChild(line);
+}
+</script>
 
-                <div class="field">
-                    <label>Age</label>
-                    <input type="number" step="1" name="age" placeholder="e.g. 45" required>
-                </div>
-
-                <div class="field">
-                    <label>Hypertension</label>
-                    <select name="hypertension">
-                        <option value="0">No</option>
-                        <option value="1">Yes</option>
-                    </select>
-                </div>
-
-                <div class="field">
-                    <label>Heart Disease</label>
-                    <select name="heart_disease">
-                        <option value="0">No</option>
-                        <option value="1">Yes</option>
-                    </select>
-                </div>
-
-                <div class="field">
-                    <label>Smoking History</label>
-                    <select name="smoking_history">
-                        <option value="never">never</option>
-                        <option value="No Info">No Info</option>
-                        <option value="former">former</option>
-                        <option value="not current">not current</option>
-                        <option value="ever">ever</option>
-                        <option value="current">current</option>
-                    </select>
-                </div>
-
-                <div class="field">
-                    <label>BMI</label>
-                    <input type="number" step="0.1" name="bmi" placeholder="e.g. 27.3" required>
-                </div>
-
-                <div class="field">
-                    <label>HbA1c Level</label>
-                    <input type="number" step="0.1" name="HbA1c_level" placeholder="e.g. 5.8" required>
-                </div>
-
-                <div class="field">
-                    <label>Blood Glucose Level</label>
-                    <input type="number" step="1" name="blood_glucose_level" placeholder="e.g. 140" required>
-                </div>
-            </div>
-
-            <button type="submit">Check Risk</button>
-        </form>
-    </main>
 </body>
 </html>
